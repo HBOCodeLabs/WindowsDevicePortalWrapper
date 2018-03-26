@@ -53,22 +53,48 @@ namespace Microsoft.Tools.WindowsDevicePortal
             return processId;
         }
 
+        /// <summary>
+        /// Gets the current running apps on the console based on app processes
+        /// </summary>
+        /// <returns>List of Package Full Names of running apps</returns>
         public async Task<List<string>> GetRunningAppsAsync()
         {
-            RunningProcesses runningApps = await this.GetRunningProcessesAsync();
-            List<string> runningProcessNames = new List<string>();
+            RunningProcesses appProcesses = await this.GetRunningProcessesAsync();
+            List<string> runningApps = new List<string>();
 
-            foreach (DeviceProcessInfo process in runningApps.Processes)
+            foreach (DeviceProcessInfo process in appProcesses.Processes)
             {
-                // There can be multiple processes per app, so only add an app package name
-                // if it doesn't already exist in the list
-                if (process.PackageFullName != null && !runningProcessNames.Contains(process.PackageFullName))
+                // There can be multiple processes per app, so only add an app package name if it doesn't already
+                // exist in the list and it is actually running - processes listed can be in the suspended state
+                if (process.PackageFullName != null && process.IsRunning && !runningApps.Contains(process.PackageFullName))
                 {
-                    runningProcessNames.Add(process.PackageFullName);
+                    runningApps.Add(process.PackageFullName);
                 }
             }
 
-            return runningProcessNames;
+            return runningApps;
+        }
+
+        /// <summary>
+        /// Gets the current suspended apps on the console based on app processes
+        /// </summary>
+        /// <returns>List of Package Full Names of suspended apps</returns>
+        public async Task<List<string>> GetSuspendedAppsAsync()
+        {
+            RunningProcesses appProcesses = await this.GetRunningProcessesAsync();
+            List<string> suspendedApps = new List<string>();
+
+            foreach (DeviceProcessInfo process in appProcesses.Processes)
+            {
+                // There can be multiple processes per app, so only add an app package name if it doesn't already
+                // exist in the list and it is in a suspended state (not running)
+                if (process.PackageFullName != null && !process.IsRunning && !suspendedApps.Contains(process.PackageFullName))
+                {
+                    suspendedApps.Add(process.PackageFullName);
+                }
+            }
+
+            return suspendedApps;
         }
 
         /// <summary>

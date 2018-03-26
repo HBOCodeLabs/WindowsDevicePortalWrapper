@@ -65,8 +65,8 @@ namespace XboxWdpDriver
             None,
 
             /// <summary>
-            /// Perform an App operation (List, ListRunningApps, Suspend, Resume, Launch,
-            /// Terminate, Uninstall)
+            /// Perform an App operation (List, ListRunningApps, ListSuspendedApps, Suspend, Resume,
+            /// Launch, Terminate, Uninstall)
             /// </summary>
             AppOperation,
 

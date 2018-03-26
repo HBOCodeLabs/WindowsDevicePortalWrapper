@@ -14,7 +14,8 @@ using static Microsoft.Tools.WindowsDevicePortal.DevicePortal;
 namespace XboxWdpDriver
 {
     /// <summary>
-    /// Helper for App related operations (List, Suspend, Resume, Launch, Terminate, Uninstall)
+    /// Helper for App related operations (List, ListRunningApps, ListSuspendedApps,
+    /// Suspend, Resume, Launch, Terminate, Uninstall)
     /// </summary>
     public class AppOperation
     {
@@ -25,6 +26,8 @@ namespace XboxWdpDriver
             "  /subop:list\n" +
             "        Lists all installed packages on the console.\n" +
             "  /subop:listRunningApps\n" +
+            "        Lists all running app packages on the console.\n" +
+            "  /subop:listSuspendedApps\n" +
             "        Lists all running app packages on the console.\n" +
             // Suspend and resume are currently not supported. The endpoints are not very
             // reliable yet on Xbox One and are completely unavailable on other platforms.
@@ -89,7 +92,25 @@ namespace XboxWdpDriver
                     }
                     else
                     {
-                        Console.WriteLine("No Apps are running");
+                        Console.WriteLine("No Apps are currently Running");
+                    }
+                }
+                else if (operationType.Equals("listsuspendedapps"))
+                {
+                    Task<List<string>> packagesTask = portal.GetSuspendedAppsAsync();
+
+                    packagesTask.Wait();
+                    if (packagesTask.Result.Count > 0)
+                    {
+                        Console.WriteLine("Suspended Apps:");
+                        for (int i = 0; i < packagesTask.Result.Count; i++)
+                        {
+                            Console.WriteLine(packagesTask.Result[i]);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Apps are currently Suspended");
                     }
                 }
                 else
