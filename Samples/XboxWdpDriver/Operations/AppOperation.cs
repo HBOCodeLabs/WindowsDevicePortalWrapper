@@ -77,14 +77,15 @@ namespace XboxWdpDriver
                     packagesTask.Wait();
                     Console.WriteLine(packagesTask.Result);
                 }
-                else if (operationType.Equals("listrunningapps"))
+                else if (operationType.Equals("listrunningapps") || operationType.Equals("listsuspendedapps"))
                 {
-                    Task<List<string>> packagesTask = portal.GetRunningAppsAsync();
+                    string appState = (operationType.Equals("listrunningapps") ? "Running" : "Suspended");
+                    Task<List<string>> packagesTask = portal.GetAppListAsync(appState);
 
                     packagesTask.Wait();
                     if (packagesTask.Result.Count > 0)
                     {
-                        Console.WriteLine("Running Apps:");
+                        Console.WriteLine(appState + " Apps:");
                         for (int i = 0; i < packagesTask.Result.Count; i++)
                         {
                             Console.WriteLine(packagesTask.Result[i]);
@@ -92,25 +93,7 @@ namespace XboxWdpDriver
                     }
                     else
                     {
-                        Console.WriteLine("No Apps are currently Running");
-                    }
-                }
-                else if (operationType.Equals("listsuspendedapps"))
-                {
-                    Task<List<string>> packagesTask = portal.GetSuspendedAppsAsync();
-
-                    packagesTask.Wait();
-                    if (packagesTask.Result.Count > 0)
-                    {
-                        Console.WriteLine("Suspended Apps:");
-                        for (int i = 0; i < packagesTask.Result.Count; i++)
-                        {
-                            Console.WriteLine(packagesTask.Result[i]);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No Apps are currently Suspended");
+                        Console.WriteLine("No Apps are currently " + appState);
                     }
                 }
                 else
