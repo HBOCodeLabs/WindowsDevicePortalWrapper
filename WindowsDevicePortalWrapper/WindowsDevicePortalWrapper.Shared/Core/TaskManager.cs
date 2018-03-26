@@ -63,7 +63,7 @@ namespace Microsoft.Tools.WindowsDevicePortal
             RunningProcesses appProcesses = await this.GetRunningProcessesAsync();
             List<string> apps = new List<string>();
 
-            var shouldBeRunning = (appState.ToLower().Equals("running")) ? true : false;
+            var shouldBeRunning = appState.ToLower().Equals("running") ? true : false;
             foreach (DeviceProcessInfo process in appProcesses.Processes)
             {
                 // There can be multiple processes per app, so only add an app package name if it

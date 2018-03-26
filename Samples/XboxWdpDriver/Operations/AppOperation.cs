@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Microsoft.Tools.WindowsDevicePortal;
 using static Microsoft.Tools.WindowsDevicePortal.DevicePortal;
 
-
 namespace XboxWdpDriver
 {
     /// <summary>
@@ -79,7 +78,7 @@ namespace XboxWdpDriver
                 }
                 else if (operationType.Equals("listrunningapps") || operationType.Equals("listsuspendedapps"))
                 {
-                    string appState = (operationType.Equals("listrunningapps") ? "Running" : "Suspended");
+                    string appState = operationType.Equals("listrunningapps") ? "Running" : "Suspended";
                     Task<List<string>> packagesTask = portal.GetAppListAsync(appState);
 
                     packagesTask.Wait();
