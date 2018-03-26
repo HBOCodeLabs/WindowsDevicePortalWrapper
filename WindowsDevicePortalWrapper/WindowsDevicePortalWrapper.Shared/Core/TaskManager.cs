@@ -4,6 +4,7 @@
 // </copyright>
 //----------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Microsoft.Tools.WindowsDevicePortal
@@ -50,6 +51,24 @@ namespace Microsoft.Tools.WindowsDevicePortal
             }
 
             return processId;
+        }
+
+        public async Task<List<string>> GetRunningAppsAsync()
+        {
+            RunningProcesses runningApps = await this.GetRunningProcessesAsync();
+            List<string> runningProcessNames = new List<string>();
+
+            foreach (DeviceProcessInfo process in runningApps.Processes)
+            {
+                // There can be multiple processes per app, so only add an app package name
+                // if it doesn't already exist in the list
+                if (process.PackageFullName != null && !runningProcessNames.Contains(process.PackageFullName))
+                {
+                    runningProcessNames.Add(process.PackageFullName);
+                }
+            }
+
+            return runningProcessNames;
         }
 
         /// <summary>

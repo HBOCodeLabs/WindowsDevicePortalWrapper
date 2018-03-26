@@ -5,9 +5,11 @@
 //----------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Tools.WindowsDevicePortal;
 using static Microsoft.Tools.WindowsDevicePortal.DevicePortal;
+
 
 namespace XboxWdpDriver
 {
@@ -22,9 +24,11 @@ namespace XboxWdpDriver
         private const string AppUsageMessage = "Usage:\n" +
             "  /subop:list\n" +
             "        Lists all installed packages on the console.\n" +
-    // Suspend and resume are currently not supported. The endpoints are not very
-    // reliable yet on Xbox One and are completely unavailable on other platforms.
-    // We'll revisit these two operations in the future.
+            "  /subop:listRunningApps\n" +
+            "        Lists all running app packages on the console.\n" +
+            // Suspend and resume are currently not supported. The endpoints are not very
+            // reliable yet on Xbox One and are completely unavailable on other platforms.
+            // We'll revisit these two operations in the future.
             //"  /subop:suspend /pfn:<packageFullName>\n" +
             //"        Suspends the requested application.\n" +
             //"  /subop:resume /pfn:<packageFullName>\n" +
@@ -69,6 +73,24 @@ namespace XboxWdpDriver
 
                     packagesTask.Wait();
                     Console.WriteLine(packagesTask.Result);
+                }
+                else if (operationType.Equals("listrunningapps"))
+                {
+                    Task<List<string>> packagesTask = portal.GetRunningAppsAsync();
+
+                    packagesTask.Wait();
+                    if (packagesTask.Result.Count > 0)
+                    {
+                        Console.WriteLine("Running Apps:");
+                        for (int i = 0; i < packagesTask.Result.Count; i++)
+                        {
+                            Console.WriteLine(packagesTask.Result[i]);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Apps are running");
+                    }
                 }
                 else
                 {
