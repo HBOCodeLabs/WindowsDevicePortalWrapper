@@ -42,7 +42,11 @@ Allows getting the list of applications on the console and performing some basic
 Usage:
 ```shell
   /subop:list
-        Lists all installed packages on the console.
+	 Lists all installed packages on the console.
+  /subop:listRunningApps
+	 Lists all running app packages on the cosole.
+  /subop:listSuspendedApps
+	 Lists all suspended app packages on the console.
   /subop:launch /pfn:<packageFullName> /aumid:<appId>
         Starts the requested application.
   /subop:terminate /pfn:<packageFullName>
@@ -54,6 +58,14 @@ Usage:
 Examples:
 ```shell
 XboxWdpDriver.exe /op:app /subop:list
+```
+
+```shell
+XboxWdpDriver.exe /op:app /subop:listRunningApps
+```
+
+```shell
+XboxWdpDriver.exe /op:app /subop:listSuspendedApps
 ```
 
 ```shell
