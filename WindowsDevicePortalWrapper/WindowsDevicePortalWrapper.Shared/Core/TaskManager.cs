@@ -2,6 +2,9 @@
 // <copyright file="TaskManager.cs" company="Microsoft Corporation">
 //     Licensed under the MIT License. See LICENSE.TXT in the project root license information.
 // </copyright>
+// <copyright file="TaskManager.cs" company="HBO">
+//     Support listing running and suspended apps on Xbox. See LICENSE.TXT in the project root for license information.
+// </copyright>
 //----------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
