@@ -2,6 +2,9 @@
 // <copyright file="AppOperation.cs" company="Microsoft Corporation">
 //     Licensed under the MIT License. See LICENSE.TXT in the project root license information.
 // </copyright>
+// <copyright file="AppOperation.cs" company="HBO">
+//     Modified to support listing running and suspended apps. See LICENSE.TXT in the project root for license information.
+// </copyright>
 //----------------------------------------------------------------------------------------------
 
 using System;
@@ -85,9 +88,9 @@ namespace XboxWdpDriver
                     if (packagesTask.Result.Count > 0)
                     {
                         Console.WriteLine(appState + " Apps:");
-                        for (int i = 0; i < packagesTask.Result.Count; i++)
+                        foreach(var package in packagesTask.Result)
                         {
-                            Console.WriteLine(packagesTask.Result[i]);
+                            Console.WriteLine(package);
                         }
                     }
                     else
