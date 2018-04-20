@@ -2,9 +2,13 @@
 // <copyright file="AppOperation.cs" company="Microsoft Corporation">
 //     Licensed under the MIT License. See LICENSE.TXT in the project root license information.
 // </copyright>
+// <copyright file="AppOperation.cs" company="HBO">
+//     Modified to support listing running and suspended apps. See LICENSE.TXT in the project root for license information.
+// </copyright>
 //----------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Tools.WindowsDevicePortal;
 using static Microsoft.Tools.WindowsDevicePortal.DevicePortal;
@@ -12,7 +16,8 @@ using static Microsoft.Tools.WindowsDevicePortal.DevicePortal;
 namespace XboxWdpDriver
 {
     /// <summary>
-    /// Helper for App related operations (List, Suspend, Resume, Launch, Terminate, Uninstall)
+    /// Helper for App related operations (List, ListRunningApps, ListSuspendedApps,
+    /// Suspend, Resume, Launch, Terminate, Uninstall)
     /// </summary>
     public class AppOperation
     {
@@ -22,9 +27,13 @@ namespace XboxWdpDriver
         private const string AppUsageMessage = "Usage:\n" +
             "  /subop:list\n" +
             "        Lists all installed packages on the console.\n" +
-    // Suspend and resume are currently not supported. The endpoints are not very
-    // reliable yet on Xbox One and are completely unavailable on other platforms.
-    // We'll revisit these two operations in the future.
+            "  /subop:listRunningApps\n" +
+            "        Lists all running app packages on the console.\n" +
+            "  /subop:listSuspendedApps\n" +
+            "        Lists all running app packages on the console.\n" +
+            // Suspend and resume are currently not supported. The endpoints are not very
+            // reliable yet on Xbox One and are completely unavailable on other platforms.
+            // We'll revisit these two operations in the future.
             //"  /subop:suspend /pfn:<packageFullName>\n" +
             //"        Suspends the requested application.\n" +
             //"  /subop:resume /pfn:<packageFullName>\n" +
@@ -69,6 +78,25 @@ namespace XboxWdpDriver
 
                     packagesTask.Wait();
                     Console.WriteLine(packagesTask.Result);
+                }
+                else if (operationType.Equals("listrunningapps") || operationType.Equals("listsuspendedapps"))
+                {
+                    string appState = operationType.Equals("listrunningapps") ? "Running" : "Suspended";
+                    Task<List<string>> packagesTask = portal.GetAppListAsync(appState);
+
+                    packagesTask.Wait();
+                    if (packagesTask.Result.Count > 0)
+                    {
+                        Console.WriteLine(appState + " Apps:");
+                        foreach (var package in packagesTask.Result)
+                        {
+                            Console.WriteLine(package);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Apps are currently " + appState);
+                    }
                 }
                 else
                 {

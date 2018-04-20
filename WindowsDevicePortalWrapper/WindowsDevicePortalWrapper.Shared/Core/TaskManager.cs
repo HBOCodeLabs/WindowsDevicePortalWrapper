@@ -2,8 +2,12 @@
 // <copyright file="TaskManager.cs" company="Microsoft Corporation">
 //     Licensed under the MIT License. See LICENSE.TXT in the project root license information.
 // </copyright>
+// <copyright file="TaskManager.cs" company="HBO">
+//     Support listing running and suspended apps on Xbox. See LICENSE.TXT in the project root for license information.
+// </copyright>
 //----------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Microsoft.Tools.WindowsDevicePortal
@@ -51,6 +55,31 @@ namespace Microsoft.Tools.WindowsDevicePortal
 
             return processId;
         }
+
+        /// <summary>
+        /// Gets the current list of apps on the console in the state specified
+        /// </summary>
+        /// <param name="appState">State of apps to be returned as a string - "running" or "suspended"</param>
+        /// <returns>List of Package Full Names of running or suspended apps</returns>
+        public async Task<List<string>> GetAppListAsync(string appState)
+        {
+            RunningProcesses appProcesses = await this.GetRunningProcessesAsync();
+            List<string> apps = new List<string>();
+
+            var shouldBeRunning = appState.ToLower().Equals("running") ? true : false;
+            foreach (DeviceProcessInfo process in appProcesses.Processes)
+            {
+                // There can be multiple processes per app, so only add an app package name if it
+                // doesn't already exist in the list and matches the state requested
+                if (process.PackageFullName != null && !apps.Contains(process.PackageFullName) && process.IsRunning == shouldBeRunning)
+                {
+                    apps.Add(process.PackageFullName);
+                }
+            }
+
+            return apps;
+        }
+
 
         /// <summary>
         /// Stops the specified application from running.

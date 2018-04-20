@@ -2,6 +2,9 @@
 // <copyright file="Program.cs" company="Microsoft Corporation">
 //     Licensed under the MIT License. See LICENSE.TXT in the project root license information.
 // </copyright>
+// <copyright file="Program.cs" company="HBO">
+//     Modified docs to include listing running and suspended apps. See LICENSE.TXT in the project root for license information.
+// </copyright>
 //----------------------------------------------------------------------------------------------
 
 using System;
@@ -65,8 +68,8 @@ namespace XboxWdpDriver
             None,
 
             /// <summary>
-            /// Perform an App operation (List, Suspend, Resume, Launch, Terminate,
-            /// Uninstall)
+            /// Perform an App operation (List, ListRunningApps, ListSuspendedApps, Suspend, Resume,
+            /// Launch, Terminate, Uninstall)
             /// </summary>
             AppOperation,
 
