@@ -88,7 +88,7 @@ namespace XboxWdpDriver
                     if (packagesTask.Result.Count > 0)
                     {
                         Console.WriteLine(appState + " Apps:");
-                        foreach(var package in packagesTask.Result)
+                        foreach (var package in packagesTask.Result)
                         {
                             Console.WriteLine(package);
                         }
